@@ -1,23 +1,25 @@
-
 package encriptado;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-
 public class Encriptado extends JFrame implements ActionListener {
 
-    public JButton botonCrear  = new JButton("Crear arbol");    
+    public JButton botonIngreso  = new JButton("Codificar Cadena");    
     
     public JLabel label = new JLabel("Digite el mensaje. Solo se aceptan caracteres de la 'a' a la 'z' : ");
     public JLabel label6 = new JLabel("Sin comprimir: ");
@@ -28,9 +30,15 @@ public class Encriptado extends JFrame implements ActionListener {
     
     public JTextField tfIngreso = new JTextField("bggeafeafabcfcfdceg");
     
+    ArbolHuffman arbol = new ArbolHuffman();
+    
     private List <Nodo> listaArbol = new ArrayList();
-    private JPanel jpan;
+    
+    JScrollPane scrollPane = new JScrollPane();
+    JScrollPane scrollPane1 = new JScrollPane();
+    
     private String entrada;
+    private Nodo raiz;
     
     String [][] matriz;
     
@@ -64,28 +72,38 @@ public class Encriptado extends JFrame implements ActionListener {
         
         c.add(tfIngreso);
         
-        c.add(botonCrear);
+        c.add(botonIngreso);
+
+        c.add(scrollPane1);
         
-        jpan = new JPanel();       
+//        cuadro = new JPanel();       
+//        
+//        cuadro.setBounds(0, 200, 1300, 500);
+//        cuadro.setBackground(Color.MAGENTA);
+//        
+//        c.add(cuadro);
         
-        jpan.setBounds(0, 200, 1300, 500);
-        jpan.setOpaque(false);
-        jpan.setBackground(new Color(0,0,0,0));
-        add(jpan);
-        
-        botonCrear.addActionListener(this);
+        botonIngreso.addActionListener(this);
         
         label.setBounds(200, 25, 500, 20);
         label6.setBounds(500, 60, 200, 20);
         label7.setBounds(620, 60, 200, 20);
         label8.setBounds(700, 60, 200, 20);
         label9.setBounds(595, 60,370,20);
-        label10.setBounds(730, 60,370,20);
+        label10.setBounds(650, 60,370,20);
         
         tfIngreso.setBounds(560, 25, 320, 20);
         
-        botonCrear.setBounds(900, 25, 200, 20);
-        botonCrear.setBackground(Color.ORANGE);
+        botonIngreso.setBounds(900, 25, 200, 20);
+        botonIngreso.setBackground(Color.ORANGE);
+        
+        scrollPane.setBounds(0, 200, 2500, 2500);
+        scrollPane.setPreferredSize(new Dimension(2500, 2500));  
+        scrollPane.setBackground(Color.LIGHT_GRAY);
+        
+        scrollPane1.setBounds(0, 200, 1280, 460);
+        scrollPane1.setPreferredSize(new Dimension(1280, 460));
+        scrollPane1.setBackground(Color.BLUE);
         
     }
     
@@ -159,7 +177,7 @@ public class Encriptado extends JFrame implements ActionListener {
         
         Nodo padre, hijoDer, hijoIzq;
         
-        while(tempColum < 13){
+        while(tempColum < ((letras.size()*2) - 1)){
             
             for(int i = frecuencia.size()-1; i>=0; i--){
             
@@ -241,20 +259,181 @@ public class Encriptado extends JFrame implements ActionListener {
             System.out.println(" ");
             
         }
-        
-        System.out.println(frecuencia);
-        System.out.println(padres);
-        
-        ArbolHuffman arbol = new ArbolHuffman();
-        
-        Nodo raiz = arbol.crearArbol(padres);
+               
+        raiz = arbol.crearArbol(padres);
         
     }
+    
+    private boolean todoNull(List list) {
+        
+        for (Object object : list) {
+            if (object != null)
+                return false;
+        }
 
+        return true;
+    }
+    
+    public void listarArbol(List<Nodo> nodos, int nivel, int profundidad){
+        
+        System.out.println(nodos);
+        
+        if (nodos.isEmpty() || todoNull(nodos)){
+        
+            return;
+
+        }
+       
+        int ubicacion = profundidad - nivel;
+        List<Nodo> newNodes = new ArrayList<>();
+        
+        for (Nodo node : nodos) {
+            if (node != null) {
+                
+                newNodes.add(node.getIzquierdo());
+                newNodes.add(node.getDerecho());
+                listaArbol.add(node.getIzquierdo());
+                listaArbol.add(node.getDerecho());
+                
+                
+            } else {
+                
+                newNodes.add(null);
+                newNodes.add(null);
+                listaArbol.add(null);
+                listaArbol.add(null);
+            
+            }
+        }
+        
+        listarArbol(newNodes, nivel + 1, profundidad);
+            
+    
+    }
+    
+    void pintarArbol(){
+        
+        int exponente = 0;
+        int i=0;
+        int j=0;
+        int coorX = 630;
+        int coorY = 30;
+        
+        JLabel numeros[]=new JLabel[listaArbol.size()];
+        
+        while(i<listaArbol.size()){
+        
+            if(j >= Math.pow(2, exponente)){           
+                
+                exponente=exponente+1;
+                j=0;
+                coorY = coorY + 50;
+                coorX = (int) ((1260/(Math.pow(2, (exponente + 1)))));
+                
+            }
+            
+            if(j != 0){
+                coorX = (int) ( coorX + (1260/(Math.pow(2, (exponente) ))) );
+            }
+            
+            if(listaArbol.get(i) != null){
+                
+                numeros[i]= new JLabel(listaArbol.get(i).getValor());
+                numeros[i].setBounds(coorX, coorY, 30, 30);
+            
+                JLabel img1 = new JLabel();
+                
+                int escala = (int) (280/((Math.pow(2, (exponente)))));
+                
+                if(listaArbol.get(i).getDerecho() != null){
+                
+                    
+                    ImageIcon imgIcon = new ImageIcon(getClass().getResource("flecha.png"));
+                    
+                    Image imgEscalada = imgIcon.getImage().getScaledInstance(escala,30, Image.SCALE_SMOOTH);
+                    Icon iconoEscalado = new ImageIcon(imgEscalada);
+                    img1.setBounds(coorX+20 , coorY + 30, escala, 30);
+                    img1.setIcon(iconoEscalado);
+                    
+                    scrollPane.add(img1);
+            
+                    
+                } 
+                
+                img1 = new JLabel();
+                
+                if(listaArbol.get(i).getIzquierdo()!= null){
+                
+                    ImageIcon imgIcon = new ImageIcon(getClass().getResource("fder.png"));
+            
+                    Image imgEscalada = imgIcon.getImage().getScaledInstance(escala,30, Image.SCALE_SMOOTH);
+                    Icon iconoEscalado = new ImageIcon(imgEscalada);
+                    img1.setBounds(coorX-escala , coorY + 30, escala, 30);
+                    img1.setIcon(iconoEscalado);
+                    
+                    scrollPane.add(img1);
+                    
+                }
+                
+                scrollPane.add(numeros[i]);
+            
+            
+            } else {
+
+                numeros[i]= new JLabel("");
+                scrollPane.add(numeros[i]);
+
+            }
+            
+            System.out.println(numeros[i].getText());
+            System.out.println(coorX);
+            System.out.println(coorY);
+            System.out.println(" ");
+            
+            i++;
+            j++;
+        }
+         
+        scrollPane.repaint();
+        
+    }
+    
+    void dibujar(){
+        
+        List <Nodo> lista = new ArrayList();
+        lista.add(raiz);
+        listaArbol = new ArrayList();
+        listaArbol.add(raiz);
+        listarArbol(lista, 0, arbol.getMax());
+
+        pintarArbol();
+    
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        
+        if(e.getSource() == this.botonIngreso){
+            
+            entrada = tfIngreso.getText();
+            
+            int caracteres = entrada.length();
+            
+            label9.setText(Integer.toString(caracteres));
+            label10.setText(Integer.toString(8*caracteres));
+            
+            crearMatriz(entrada);
+            
+            System.out.println(arbol.printInorder(raiz));
+            
+            scrollPane.removeAll();
+            
+            dibujar();
+            
+            scrollPane.repaint();
+            scrollPane1.setViewportView(scrollPane);
+            
+        }
         
     }
     

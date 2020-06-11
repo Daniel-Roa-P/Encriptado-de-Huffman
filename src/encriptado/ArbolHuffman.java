@@ -6,6 +6,8 @@ import java.util.ArrayList;
 public class ArbolHuffman {
     
     private Nodo raiz = null;
+    private int nivel = 0, max = 0;
+    private String cadena = "";
     
     public Nodo crearArbol(ArrayList <Nodo> padres){
         
@@ -68,6 +70,35 @@ public class ArbolHuffman {
         this.raiz = raiz;
     }
 
+    String printInorder(Nodo nodo){
+        
+        if (nodo == null){ 
+            return ""; 
+        }
+        
+        nivel++;
+        printInorder(nodo.getIzquierdo()); 
+        nivel--;
+        
+        cadena = cadena + nodo.getValor() +", ";
+        
+        if(nivel > max){
+        
+            max = nivel;
+            
+        }
+        
+        nivel++;
+        printInorder(nodo.getDerecho()); 
+        nivel--;
+        
+        return cadena;
+        
+    } 
+    
+    public int getMax() {
+        return max;
+    }
     
 }
 
