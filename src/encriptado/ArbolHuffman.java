@@ -11,50 +11,58 @@ public class ArbolHuffman {
     
     public Nodo crearArbol(ArrayList <Nodo> padres){
         
+        ArrayList <Nodo> hijos;
+        hijos = new ArrayList<>();
+        
+        for(int i = 0; i<padres.size()-1;i++){
+            
+            hijos.add(padres.get(i));
+            
+        }
+        
         raiz = padres.get(padres.size()-1);
         
         Nodo tempRaiz, tempHijo;
-        
-        int i = padres.size()-1;
+        int j = hijos.size()-1;
         boolean vacio1 = true, vacio2 = true;
         
-        while(!padres.isEmpty()){
-
-            if(i!=0){
+        while(!hijos.isEmpty()){
             
                 tempRaiz = padres.get(padres.size()-1);
-                tempHijo = padres.get(i-1);
-
+                tempHijo = hijos.get(j);
+                
                 if( tempHijo.getValor().equals(tempRaiz.getDerecho().getValor()) && vacio1 ){
 
                     tempRaiz.setDerecho(tempHijo);
-                    i--;
+                    j--;
                     vacio1=false;
-                    
+                    tempRaiz.getDerecho().setCodigo(tempRaiz.getCodigo() + "1");
+                    tempHijo.getDerecho().setCodigo(tempRaiz.getCodigo() + "11");
+                    tempHijo.getIzquierdo().setCodigo(tempRaiz.getCodigo() + "10");
+                    hijos.remove(tempHijo);
+                                        
                 }else if( tempHijo.getValor().equals(tempRaiz.getIzquierdo().getValor()) && vacio2 ){
 
                     tempRaiz.setIzquierdo(tempHijo);
-                    i--;
+                    j--;
                     vacio2=false;
+                    tempRaiz.getIzquierdo().setCodigo(tempRaiz.getCodigo() + "0");
+                    tempHijo.getIzquierdo().setCodigo(tempRaiz.getCodigo() + "00");
+                    tempHijo.getDerecho().setCodigo(tempRaiz.getCodigo() + "01");
+                    hijos.remove(tempHijo);
                     
-                } else if ((i-1) == 0) {
+                } else if ((j-1) == -1) {
 
-                    padres.remove(padres.size()-1);
-                    i = padres.size()-1;
+                    padres.remove(tempRaiz);
+                    j = hijos.size()-1;
                     vacio1 = true;
                     vacio2 = true;
 
                 } else {
-
-                    i--;
-
+                    
+                    j--;
+                    
                 }
-
-            } else {
-                
-                break;
-                
-            }
             
         }
         

@@ -28,7 +28,7 @@ public class Encriptado extends JFrame implements ActionListener {
     public JLabel label9 = new JLabel("-");
     public JLabel label10 = new JLabel("-");
     
-    public JTextField tfIngreso = new JTextField("bggeafeafabcfcfdceg");
+    public JTextField tfIngreso = new JTextField("danielalejandroroapalacios");
     
     ArbolHuffman arbol = new ArbolHuffman();
     
@@ -76,13 +76,6 @@ public class Encriptado extends JFrame implements ActionListener {
 
         c.add(scrollPane1);
         
-//        cuadro = new JPanel();       
-//        
-//        cuadro.setBounds(0, 200, 1300, 500);
-//        cuadro.setBackground(Color.MAGENTA);
-//        
-//        c.add(cuadro);
-        
         botonIngreso.addActionListener(this);
         
         label.setBounds(200, 25, 500, 20);
@@ -121,10 +114,10 @@ public class Encriptado extends JFrame implements ActionListener {
             }
             
             int index = letras.indexOf(temp);
+            int nuevaFrecuencia = 1 + frecuencia.get(index);
             
-            frecuencia.set(index, 1 + frecuencia.get(index));
-            
-            
+            frecuencia.set(index, nuevaFrecuencia);
+                
         }
         
         for(int i=0;i < frecuencia.size() + 1; i++) {
@@ -212,8 +205,25 @@ public class Encriptado extends JFrame implements ActionListener {
             
             if(menor1 > menor2){           
                 
-                hijoDer = new Nodo(String.valueOf(menor1));
-                hijoIzq = new Nodo(String.valueOf(menor2));
+                if(indice1 < letras.size()){
+                
+                    hijoDer = new Nodo(matriz[0][indice1]);
+                    
+                } else {
+                
+                    hijoDer = new Nodo(String.valueOf(menor1));
+                    
+                }
+                
+                if(indice2 < letras.size()){
+                
+                    hijoIzq = new Nodo(matriz[0][indice2]);
+                    
+                } else {
+                
+                    hijoIzq = new Nodo(String.valueOf(menor2));
+                    
+                }
                 
                 matriz[4][tempColum] = Integer.toString(indice1);
                 matriz[5][tempColum] = Integer.toString(indice2); 
@@ -223,8 +233,25 @@ public class Encriptado extends JFrame implements ActionListener {
                
             } else {
                 
-                hijoDer = new Nodo(String.valueOf(menor2));
-                hijoIzq = new Nodo(String.valueOf(menor1));
+                if(indice1 < letras.size()){
+                
+                    hijoIzq = new Nodo(matriz[0][indice1]);
+                    
+                } else {
+                
+                    hijoIzq = new Nodo(String.valueOf(menor1));
+                    
+                }
+                
+                if(indice2 < letras.size()){
+                
+                    hijoDer = new Nodo(matriz[0][indice2]);
+                    
+                } else {
+                
+                    hijoDer = new Nodo(String.valueOf(menor2));
+                    
+                }
                 
                 matriz[4][tempColum] = Integer.toString(indice1);
                 matriz[5][tempColum] = Integer.toString(indice2); 
@@ -233,9 +260,6 @@ public class Encriptado extends JFrame implements ActionListener {
                 matriz[3][indice2] = Integer.toString(2); 
                
             }
-          
-            hijoDer.setPadre(padre);
-            hijoIzq.setPadre(padre);
 
             padre.setDerecho(hijoDer);
             padre.setIzquierdo(hijoIzq);
@@ -259,14 +283,14 @@ public class Encriptado extends JFrame implements ActionListener {
             System.out.println(" ");
             
         }
-               
+        
         raiz = arbol.crearArbol(padres);
         
     }
     
     private boolean todoNull(List list) {
         
-        for (Object object : list) {
+        for(Object object : list) {
             if (object != null)
                 return false;
         }
@@ -275,8 +299,6 @@ public class Encriptado extends JFrame implements ActionListener {
     }
     
     public void listarArbol(List<Nodo> nodos, int nivel, int profundidad){
-        
-        System.out.println(nodos);
         
         if (nodos.isEmpty() || todoNull(nodos)){
         
@@ -316,7 +338,7 @@ public class Encriptado extends JFrame implements ActionListener {
         int exponente = 0;
         int i=0;
         int j=0;
-        int coorX = 630;
+        int coorX = 1000;
         int coorY = 30;
         
         JLabel numeros[]=new JLabel[listaArbol.size()];
@@ -327,32 +349,41 @@ public class Encriptado extends JFrame implements ActionListener {
                 
                 exponente=exponente+1;
                 j=0;
-                coorY = coorY + 50;
-                coorX = (int) ((1260/(Math.pow(2, (exponente + 1)))));
+                coorY = coorY + 70;
+                coorX = (int) ((2000/(Math.pow(2, (exponente + 1)))));
                 
             }
             
             if(j != 0){
-                coorX = (int) ( coorX + (1260/(Math.pow(2, (exponente) ))) );
+                coorX = (int) ( coorX + (2000/(Math.pow(2, (exponente) ))) );
             }
             
             if(listaArbol.get(i) != null){
-                
-                numeros[i]= new JLabel(listaArbol.get(i).getValor());
-                numeros[i].setBounds(coorX, coorY, 30, 30);
             
+                if(listaArbol.get(i).getIzquierdo() == null && listaArbol.get(i).getDerecho() == null){
+                 
+                    numeros[i]= new JLabel(listaArbol.get(i).getValor() + " - " + listaArbol.get(i).getCodigo());
+                    numeros[i].setBounds(coorX, coorY, 100, 30);
+                   
+                } else {
+                    
+                    numeros[i]= new JLabel(listaArbol.get(i).getValor());
+                    numeros[i].setBounds(coorX, coorY, 30, 30);
+                    
+                }
+                
                 JLabel img1 = new JLabel();
                 
-                int escala = (int) (280/((Math.pow(2, (exponente)))));
+                int escala = (int) (450/((Math.pow(2, (exponente)))));
                 
                 if(listaArbol.get(i).getDerecho() != null){
                 
                     
                     ImageIcon imgIcon = new ImageIcon(getClass().getResource("flecha.png"));
                     
-                    Image imgEscalada = imgIcon.getImage().getScaledInstance(escala,30, Image.SCALE_SMOOTH);
+                    Image imgEscalada = imgIcon.getImage().getScaledInstance(escala,50, Image.SCALE_SMOOTH);
                     Icon iconoEscalado = new ImageIcon(imgEscalada);
-                    img1.setBounds(coorX+20 , coorY + 30, escala, 30);
+                    img1.setBounds(coorX+20 , coorY + 30, escala, 50);
                     img1.setIcon(iconoEscalado);
                     
                     scrollPane.add(img1);
@@ -366,9 +397,9 @@ public class Encriptado extends JFrame implements ActionListener {
                 
                     ImageIcon imgIcon = new ImageIcon(getClass().getResource("fder.png"));
             
-                    Image imgEscalada = imgIcon.getImage().getScaledInstance(escala,30, Image.SCALE_SMOOTH);
+                    Image imgEscalada = imgIcon.getImage().getScaledInstance(escala,50, Image.SCALE_SMOOTH);
                     Icon iconoEscalado = new ImageIcon(imgEscalada);
-                    img1.setBounds(coorX-escala , coorY + 30, escala, 30);
+                    img1.setBounds(coorX-escala , coorY + 30, escala, 50);
                     img1.setIcon(iconoEscalado);
                     
                     scrollPane.add(img1);
@@ -384,11 +415,6 @@ public class Encriptado extends JFrame implements ActionListener {
                 scrollPane.add(numeros[i]);
 
             }
-            
-            System.out.println(numeros[i].getText());
-            System.out.println(coorX);
-            System.out.println(coorY);
-            System.out.println(" ");
             
             i++;
             j++;
@@ -423,8 +449,6 @@ public class Encriptado extends JFrame implements ActionListener {
             label10.setText(Integer.toString(8*caracteres));
             
             crearMatriz(entrada);
-            
-            System.out.println(arbol.printInorder(raiz));
             
             scrollPane.removeAll();
             
