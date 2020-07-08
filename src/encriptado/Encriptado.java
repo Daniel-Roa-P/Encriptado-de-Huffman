@@ -7,7 +7,9 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -20,15 +22,24 @@ import javax.swing.WindowConstants;
 public class Encriptado extends JFrame implements ActionListener {
 
     public JButton botonIngreso  = new JButton("Codificar Cadena");    
+    public JButton botonRegreso  = new JButton("Decodificar Cadena"); 
     
     public JLabel label = new JLabel("Digite el mensaje. Solo se aceptan caracteres de la 'a' a la 'z' : ");
+    public JLabel label2 = new JLabel("Comprimido: ");
+    public JLabel label3 = new JLabel("Codificado: ");
+    public JLabel label4 = new JLabel("Ahorro: ");
+    public JLabel label5 = new JLabel("Encriptado: ");
     public JLabel label6 = new JLabel("Sin comprimir: ");
     public JLabel label7 = new JLabel(" * 8 = ");
     public JLabel label8 = new JLabel("Bits");
     public JLabel label9 = new JLabel("-");
     public JLabel label10 = new JLabel("-");
+    public JLabel label11 = new JLabel("Digite el codigo de bits encriptado: ");
+    public JLabel label12 = new JLabel(" = ");
     
-    public JTextField tfIngreso = new JTextField("danielalejandroroapalacios");
+    public JTextField tfIngreso = new JTextField("telefonocelularycalculadora");
+    public JTextField tfDeco = new JTextField();
+    public JTextField tfOriginal = new JTextField();
     
     ArbolHuffman arbol = new ArbolHuffman();
     
@@ -36,6 +47,9 @@ public class Encriptado extends JFrame implements ActionListener {
     
     JScrollPane scrollPane = new JScrollPane();
     JScrollPane scrollPane1 = new JScrollPane();
+    
+    JScrollPane scrollPane2 = new JScrollPane();
+    JScrollPane scrollPane3 = new JScrollPane();
     
     private String entrada;
     private Nodo raiz;
@@ -45,6 +59,11 @@ public class Encriptado extends JFrame implements ActionListener {
     ArrayList letras = new ArrayList();
     ArrayList <Integer> frecuencia = new ArrayList();    
     ArrayList <Nodo> padres = new ArrayList();
+    
+    Map<String, String> codigos = new HashMap<>();
+    
+    String cadenaNueva = "";
+    String cadenaEspaciada = "";
     
     public static void main(String[] args) {
         
@@ -63,40 +82,66 @@ public class Encriptado extends JFrame implements ActionListener {
         this.getContentPane().setBackground(Color.LIGHT_GRAY);
         
         c.add(label);
-        
+        c.add(label2);
+        c.add(label3);
+        c.add(label4);
+        c.add(label5);
         c.add(label6);
         c.add(label7);
         c.add(label8);
         c.add(label9);
         c.add(label10);
+        c.add(label11);
+        c.add(label12);
         
         c.add(tfIngreso);
+        c.add(tfDeco);
+        c.add(tfOriginal);
         
         c.add(botonIngreso);
-
+        c.add(botonRegreso);
+        
         c.add(scrollPane1);
+        c.add(scrollPane3);
         
         botonIngreso.addActionListener(this);
+        botonRegreso.addActionListener(this);
         
         label.setBounds(200, 25, 500, 20);
-        label6.setBounds(500, 60, 200, 20);
-        label7.setBounds(620, 60, 200, 20);
-        label8.setBounds(700, 60, 200, 20);
-        label9.setBounds(595, 60,370,20);
-        label10.setBounds(650, 60,370,20);
+        label2.setBounds(500, 100, 200, 20);
+        label3.setBounds(650, 100, 200, 20);
+        label4.setBounds(500, 130, 200, 20);
+        label5.setBounds(5, 190,370,20);
+        label6.setBounds(500, 70, 200, 20);
+        label7.setBounds(620, 70, 200, 20);
+        label8.setBounds(700, 70, 200, 20);
+        label9.setBounds(595, 70,370,20);
+        label10.setBounds(650, 70,370,20);
+        label11.setBounds(200, 50, 500, 20);
+        label12.setBounds(630, 50, 500, 20);
         
         tfIngreso.setBounds(560, 25, 320, 20);
+        tfDeco.setBounds(400, 50, 220, 20);
+        tfOriginal.setBounds(660, 50, 220, 20);
         
         botonIngreso.setBounds(900, 25, 200, 20);
         botonIngreso.setBackground(Color.ORANGE);
+        botonRegreso.setBounds(900, 50, 200, 20);
+        botonRegreso.setBackground(Color.GREEN);
         
-        scrollPane.setBounds(0, 200, 2500, 2500);
+        scrollPane.setBounds(0, 250, 2500, 2500);
         scrollPane.setPreferredSize(new Dimension(2500, 2500));  
         scrollPane.setBackground(Color.LIGHT_GRAY);
         
-        scrollPane1.setBounds(0, 200, 1280, 460);
-        scrollPane1.setPreferredSize(new Dimension(1280, 460));
+        scrollPane1.setBounds(0, 250, 1280, 400);
+        scrollPane1.setPreferredSize(new Dimension(1280, 400));
         scrollPane1.setBackground(Color.BLUE);
+        
+        scrollPane2.setBounds(80, 160, 2500, 300);
+        scrollPane2.setPreferredSize(new Dimension(2500, 300));  
+        
+        scrollPane3.setBounds(80, 160, 1200, 80);
+        scrollPane3.setPreferredSize(new Dimension(1200, 80));
         
     }
     
@@ -365,6 +410,8 @@ public class Encriptado extends JFrame implements ActionListener {
                     numeros[i]= new JLabel(listaArbol.get(i).getValor() + " - " + listaArbol.get(i).getCodigo());
                     numeros[i].setBounds(coorX, coorY, 100, 30);
                    
+                    codigos.put(listaArbol.get(i).getValor() , listaArbol.get(i).getCodigo());
+                    
                 } else {
                     
                     numeros[i]= new JLabel(listaArbol.get(i).getValor());
@@ -456,6 +503,90 @@ public class Encriptado extends JFrame implements ActionListener {
             
             scrollPane.repaint();
             scrollPane1.setViewportView(scrollPane);
+            
+            scrollPane2.removeAll();
+            
+            for(int i = 0; i<entrada.length(); i++){
+                
+                char temp = entrada.charAt(i);
+                
+                cadenaNueva = cadenaNueva + codigos.get(String.valueOf(temp));
+                
+                cadenaEspaciada = cadenaEspaciada + temp + ": " + codigos.get(String.valueOf(temp)) + " - ";
+                
+            }
+            
+            System.out.println(cadenaNueva);
+            
+            label2.setText("Comprimido: " + cadenaNueva.length() + " Bits");
+            
+            double ahorro = (cadenaNueva.length()*100.0)/(entrada.length()*8.0);
+            
+            label3.setText("Codificado: " + (ahorro) + " %");
+            label4.setText("Ahorro: " + (100.0 - ahorro) + " %");
+            
+            JLabel labelEncriptado = new JLabel(cadenaNueva);
+            labelEncriptado.setBounds(5, 0, 2000, 30);
+            
+            JLabel labelOriginal = new JLabel(cadenaEspaciada);
+            labelOriginal.setBounds(5, 30, 2000, 30);
+            
+            scrollPane2.add(labelEncriptado);
+            scrollPane2.add(labelOriginal);
+            scrollPane2.repaint();
+            
+            scrollPane3.setViewportView(scrollPane2);
+
+            tfDeco.setText(cadenaNueva);
+            
+        } else if (e.getSource() == botonRegreso){
+        
+            int indice = 0;
+            
+            String cadenaDeco = " ";
+            
+            Nodo aux = raiz;
+            
+            cadenaNueva = cadenaNueva + " ";
+            
+            while(indice < cadenaNueva.length()){
+                
+                String temp = String.valueOf(cadenaNueva.charAt(indice));
+                
+                System.out.print(temp);
+                
+                System.out.print(" " + aux.getValor() + " ");
+                
+                if(aux.getDerecho() != null && temp.equals("1")){
+                    
+                    aux = aux.getDerecho();
+                    indice++;
+                    
+                } else if (aux.getIzquierdo() != null && temp.equals("0")) {
+                
+                    aux = aux.getIzquierdo();
+                    indice++;
+                    
+                } else {
+                    
+                    cadenaDeco = cadenaDeco + aux.getValor();
+                    aux = raiz;
+                    
+                    if(indice == cadenaNueva.length() - 1){
+                    
+                        indice++;
+                        
+                    }
+                    
+                    System.out.println(" ");
+                    
+                }
+                
+                
+                
+            }
+            
+            tfOriginal.setText(cadenaDeco);
             
         }
         
