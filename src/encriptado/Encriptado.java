@@ -37,7 +37,7 @@ public class Encriptado extends JFrame implements ActionListener {
     public JLabel label11 = new JLabel("Digite el codigo de bits encriptado: ");
     public JLabel label12 = new JLabel(" = ");
     
-    public JTextField tfIngreso = new JTextField("telefonocelularycalculadora");
+    public JTextField tfIngreso = new JTextField("danielalejandroroapalacios");
     public JTextField tfDeco = new JTextField();
     public JTextField tfOriginal = new JTextField();
     
@@ -50,6 +50,9 @@ public class Encriptado extends JFrame implements ActionListener {
     
     JScrollPane scrollPane2 = new JScrollPane();
     JScrollPane scrollPane3 = new JScrollPane();
+    
+    JScrollPane scrollPane4 = new JScrollPane();
+    JScrollPane scrollPane5 = new JScrollPane();
     
     private String entrada;
     private Nodo raiz;
@@ -103,45 +106,55 @@ public class Encriptado extends JFrame implements ActionListener {
         
         c.add(scrollPane1);
         c.add(scrollPane3);
+        c.add(scrollPane5);
         
         botonIngreso.addActionListener(this);
         botonRegreso.addActionListener(this);
         
-        label.setBounds(200, 25, 500, 20);
-        label2.setBounds(500, 100, 200, 20);
-        label3.setBounds(650, 100, 200, 20);
-        label4.setBounds(500, 130, 200, 20);
+        label.setBounds(5, 10, 500, 20);
+        label2.setBounds(5, 100, 200, 20);
+        label2.setForeground(Color.GREEN);
+        label3.setBounds(155, 100, 200, 20);
+        label4.setBounds(5, 130, 200, 20);
+        label4.setForeground(Color.YELLOW);
         label5.setBounds(5, 190,370,20);
-        label6.setBounds(500, 70, 200, 20);
-        label7.setBounds(620, 70, 200, 20);
-        label8.setBounds(700, 70, 200, 20);
-        label9.setBounds(595, 70,370,20);
-        label10.setBounds(650, 70,370,20);
-        label11.setBounds(200, 50, 500, 20);
-        label12.setBounds(630, 50, 500, 20);
+        label6.setBounds(5, 70, 200, 20);
+        label6.setForeground(Color.red);
+        label7.setBounds(125, 70, 200, 20);
+        label8.setBounds(205, 70, 200, 20);
+        label9.setBounds(100, 70,370,20);
+        label10.setBounds(155, 70,370,20);
+        label11.setBounds(5, 35, 500, 20);
+        label12.setBounds(440, 35, 500, 20);
         
-        tfIngreso.setBounds(560, 25, 320, 20);
-        tfDeco.setBounds(400, 50, 220, 20);
-        tfOriginal.setBounds(660, 50, 220, 20);
+        tfIngreso.setBounds(365, 10, 320, 20);
+        tfDeco.setBounds(205, 35, 220, 20);
+        tfOriginal.setBounds(465, 35, 220, 20);
         
-        botonIngreso.setBounds(900, 25, 200, 20);
+        botonIngreso.setBounds(700, 10, 200, 20);
         botonIngreso.setBackground(Color.ORANGE);
-        botonRegreso.setBounds(900, 50, 200, 20);
+        botonRegreso.setBounds(700, 35, 200, 20);
         botonRegreso.setBackground(Color.GREEN);
         
-        scrollPane.setBounds(0, 250, 2500, 2500);
+        scrollPane.setBounds(5, 270, 2500, 2500);
         scrollPane.setPreferredSize(new Dimension(2500, 2500));  
         scrollPane.setBackground(Color.LIGHT_GRAY);
         
-        scrollPane1.setBounds(0, 250, 1280, 400);
-        scrollPane1.setPreferredSize(new Dimension(1280, 400));
+        scrollPane1.setBounds(5, 270, 1275, 380);
+        scrollPane1.setPreferredSize(new Dimension(1275, 380));
         scrollPane1.setBackground(Color.BLUE);
         
         scrollPane2.setBounds(80, 160, 2500, 300);
         scrollPane2.setPreferredSize(new Dimension(2500, 300));  
         
-        scrollPane3.setBounds(80, 160, 1200, 80);
+        scrollPane3.setBounds(80, 160, 1200, 100);
         scrollPane3.setPreferredSize(new Dimension(1200, 80));
+        
+        scrollPane4.setBounds(910, 10, 2500, 300);
+        scrollPane4.setPreferredSize(new Dimension(1500, 500));  
+        
+        scrollPane5.setBounds(910, 10, 370, 140);
+        scrollPane5.setPreferredSize(new Dimension(370, 140));
         
     }
     
@@ -317,17 +330,57 @@ public class Encriptado extends JFrame implements ActionListener {
             
         }
         
-        for(int i = 0; i < 6; i++){
+        scrollPane4.removeAll();
+        
+        JTextField [][] tabla = new JTextField [7][(letras.size()*2) - 1];
+        
+        JLabel lbl1 = new JLabel("SIMBOLO");
+        JLabel lbl2 = new JLabel("FRECUENCIA");
+        JLabel lbl3 = new JLabel("PADRE");
+        JLabel lbl4 = new JLabel("TIPO");
+        JLabel lbl5 = new JLabel("IZQ");
+        JLabel lbl6 = new JLabel("DER");
+        
+        lbl1.setBounds(5, 35, 150, 20);
+        lbl2.setBounds(5, 65, 150, 20);
+        lbl3.setBounds(5, 95, 150, 20);
+        lbl4.setBounds(5, 125, 150, 20);
+        lbl5.setBounds(5, 155, 150, 20);
+        lbl6.setBounds(5, 185, 150, 20);
+        
+        scrollPane4.add(lbl1);
+        scrollPane4.add(lbl2);
+        scrollPane4.add(lbl3);
+        scrollPane4.add(lbl4);
+        scrollPane4.add(lbl5);
+        scrollPane4.add(lbl6);
+        
+        for(int i = 0; i < 7; i++){
         
             for(int j = 0; j < ((letras.size()*2) - 1); j++){
                 
-                System.out.print(matriz[i][j] + ", ");
+                if(i==0){
+                    
+                    tabla[i][j] = new JTextField(String.valueOf(j));
+                    
+                    
+                } else {
+                    
+                    tabla[i][j] = new JTextField(matriz[i-1][j]);
+                    
+                }
+                
+                tabla[i][j].setBounds(100 + 30*j, 5 + 30*i, 20, 20);
+                scrollPane4.add(tabla[i][j]);
                 
             }
             
             System.out.println(" ");
             
         }
+        
+        scrollPane4.repaint();
+        scrollPane5.setViewportView(scrollPane4);
         
         raiz = arbol.crearArbol(padres);
         
@@ -506,13 +559,27 @@ public class Encriptado extends JFrame implements ActionListener {
             
             scrollPane2.removeAll();
             
+            JTextField [][] encriptado = new JTextField [entrada.length()][2];
+            
+            int coorX = 0;
+            
             for(int i = 0; i<entrada.length(); i++){
                 
                 char temp = entrada.charAt(i);
                 
                 cadenaNueva = cadenaNueva + codigos.get(String.valueOf(temp));
                 
-                cadenaEspaciada = cadenaEspaciada + temp + ": " + codigos.get(String.valueOf(temp)) + " - ";
+                encriptado [i][0] = new JTextField();
+                encriptado [i][0].setText(String.valueOf(temp));
+                encriptado [i][1] = new JTextField(codigos.get(String.valueOf(temp)));
+                
+                encriptado[i][0].setBounds( coorX, 30, codigos.get(String.valueOf(temp)).length()*9, 20);
+                encriptado[i][1].setBounds( coorX, 50, codigos.get(String.valueOf(temp)).length()*9, 20);
+                
+                coorX = coorX + codigos.get(String.valueOf(temp)).length()*9;
+                
+                scrollPane2.add(encriptado[i][0]);
+                scrollPane2.add(encriptado[i][1]);
                 
             }
             
@@ -528,11 +595,8 @@ public class Encriptado extends JFrame implements ActionListener {
             JLabel labelEncriptado = new JLabel(cadenaNueva);
             labelEncriptado.setBounds(5, 0, 2000, 30);
             
-            JLabel labelOriginal = new JLabel(cadenaEspaciada);
-            labelOriginal.setBounds(5, 30, 2000, 30);
             
             scrollPane2.add(labelEncriptado);
-            scrollPane2.add(labelOriginal);
             scrollPane2.repaint();
             
             scrollPane3.setViewportView(scrollPane2);
